@@ -23,6 +23,8 @@ pub fn create_window() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
+    let mut i = 0;
+
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -30,8 +32,9 @@ pub fn create_window() {
                 _ => {}
             }
         }
+        i = (i+1) % (WIDTH / 16);
         grid_drawer::draw_grid(&mut canvas, &WIDTH, &HEIGHT);
         canvas.present();
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 10));
     }
 }
