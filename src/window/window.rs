@@ -1,6 +1,5 @@
 extern crate sdl2;
 
-use sdl2::pixels::Color;
 use sdl2::event::Event;
 use std::time::Duration;
 use crate::drawer::grid_drawer;
@@ -21,9 +20,6 @@ pub fn create_window() {
 
     let mut canvas = window.into_canvas().build().unwrap();
 
-    canvas.set_draw_color(Color::RGB(255, 255, 255));
-    canvas.clear();
-    canvas.present();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
