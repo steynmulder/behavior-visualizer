@@ -3,6 +3,9 @@ extern crate sdl2;
 use sdl2::pixels::Color;
 use sdl2::event::Event;
 use std::time::Duration;
+use crate::drawer::grid_drawer;
+
+
 
 pub fn create_window() {
     // barebones from https://docs.rs/sdl2/latest/sdl2/
@@ -29,6 +32,8 @@ pub fn create_window() {
                 _ => {}
             }
         }
+        grid_drawer::draw_grid(&mut canvas);
+        canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }
 }
