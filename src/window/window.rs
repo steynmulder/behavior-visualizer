@@ -1,8 +1,8 @@
 extern crate sdl2;
 
 use sdl2::event::Event;
-use std::time::Duration;
-use crate::drawer::grid_drawer;
+use std::{collections::HashMap, time::Duration};
+use crate::{colony::conway_colony::ConwayColony, drawer::grid_drawer, entity::conway_entity::ConwayEntity};
 
 pub fn create_window() {
     const WIDTH: u32 = 1920;
@@ -23,8 +23,24 @@ pub fn create_window() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    let mut i = 0;
+    let mut colony = ConwayColony::new();
+    let cell_size = 16;
 
+    for i in 0..(WIDTH/cell_size) {
+        for j in 0..(HEIGHT/cell_size) {
+            colony.add((i * cell_size, j * cell_size), ConwayEntity::new(i * cell_size, j * cell_size, false, cell_size, WIDTH, HEIGHT));
+        }
+    }
+
+    let entities: &mut HashMap<(u32, u32), ConwayEntity> = colony.get_entities();
+    entities.get_mut(&(320, 320)).unwrap().set_alive(true, &mut canvas);
+    entities.get_mut(&(336, 320)).unwrap().set_alive(true, &mut canvas);   
+    // entities.get_mut(&(336, 336)).unwrap().set_alive(true, &mut canvas);
+    entities.get_mut(&(320, 336)).unwrap().set_alive(true, &mut canvas);
+    // entities.get_mut(&(352, 352)).unwrap().set_alive(true, &mut canvas);
+    entities.get_mut(&(352, 368)).unwrap().set_alive(true, &mut canvas);   
+    entities.get_mut(&(368, 352)).unwrap().set_alive(true, &mut canvas);
+    entities.get_mut(&(368, 368)).unwrap().set_alive(true, &mut canvas);
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -32,9 +48,10 @@ pub fn create_window() {
                 _ => {}
             }
         }
-        i = (i+1) % (WIDTH / 16);
+
         grid_drawer::draw_grid(&mut canvas, &WIDTH, &HEIGHT);
+        colony.draw_entities(&mut canvas);
         canvas.present();
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 10));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32));
     }
 }
