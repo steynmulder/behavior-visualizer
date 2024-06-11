@@ -21,6 +21,10 @@ impl ConwayColony {
         for entity in self.entities.values_mut().into_iter() {
             entity.draw(canvas);
         }
+        
+    }
+
+    pub fn update_entities(&mut self) {
         let mut old_map = HashMap::new();
         for pair in <HashMap<(u32, u32), ConwayEntity> as Clone>::clone(&self.entities).into_iter() {
             old_map.insert(pair.0, pair.1);
