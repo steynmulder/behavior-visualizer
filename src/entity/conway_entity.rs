@@ -15,10 +15,25 @@ impl ConwayEntity {
         let mut neighbors: Vec<(u32, u32)> = vec![];
         if x > cell_size {
             neighbors.push((x - cell_size, y));
+            if y > cell_size {
+                neighbors.push((x - cell_size, y - cell_size));
+            }
+
+            if y + cell_size < height {
+                neighbors.push((x - cell_size, y + cell_size));
+            }
         }
 
         if x + cell_size < width {
             neighbors.push((x + cell_size, y));
+
+            if y > cell_size {
+                neighbors.push((x + cell_size, y - cell_size));
+            }
+
+            if y + cell_size < height {
+                neighbors.push((x + cell_size, y + cell_size));
+            }
         }
 
         if y > cell_size {
@@ -32,19 +47,24 @@ impl ConwayEntity {
         Self {x: x, y: y, alive: alive, neighbors: neighbors, cell_size: cell_size}
         
     }
-    pub fn update(&mut self, living_neighbors: &u8, canvas: &mut Canvas<Window>) {
+    pub fn update(&mut self, living_neighbors: &u8) {
+
         match *living_neighbors {
             x if x < 2 => {self.alive = false;},
-            x if x == 2 || (x == 3 && !self.alive) => {self.alive = true;},
+            x if self.alive && x < 4 || (x == 3 && !self.alive) => {self.alive = true;},
             _ => {self.alive = false;}
         }
 
+    }
+
+    pub fn draw(&mut self, canvas: &mut Canvas<Window>) {
         if self.alive {
             canvas.set_draw_color(Color::RGB(200, 200, 0));   
         } else {
             canvas.set_draw_color(Color::RGB(0, 200, 200));  
         }
         let _ = canvas.fill_rect(Rect::new(self.x as i32, self.y as i32, self.cell_size, self.cell_size));
+    
     }
 
     pub fn get_alive(&self) -> bool {

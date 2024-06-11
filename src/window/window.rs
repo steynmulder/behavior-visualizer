@@ -28,19 +28,19 @@ pub fn create_window() {
 
     for i in 0..(WIDTH/cell_size) {
         for j in 0..(HEIGHT/cell_size) {
-            colony.add((i * cell_size, j * cell_size), ConwayEntity::new(i * cell_size, j * cell_size, false, cell_size, WIDTH, HEIGHT));
+            colony.add((i * cell_size, j * cell_size), ConwayEntity::new(i * cell_size, j * cell_size, (i+j) % 2 == 0, cell_size, WIDTH, HEIGHT));
         }
     }
 
-    let entities: &mut HashMap<(u32, u32), ConwayEntity> = colony.get_entities();
-    entities.get_mut(&(320, 320)).unwrap().set_alive(true, &mut canvas);
-    entities.get_mut(&(336, 320)).unwrap().set_alive(true, &mut canvas);   
-    // entities.get_mut(&(336, 336)).unwrap().set_alive(true, &mut canvas);
-    entities.get_mut(&(320, 336)).unwrap().set_alive(true, &mut canvas);
-    // entities.get_mut(&(352, 352)).unwrap().set_alive(true, &mut canvas);
-    entities.get_mut(&(352, 368)).unwrap().set_alive(true, &mut canvas);   
-    entities.get_mut(&(368, 352)).unwrap().set_alive(true, &mut canvas);
-    entities.get_mut(&(368, 368)).unwrap().set_alive(true, &mut canvas);
+    // let entities: &mut HashMap<(u32, u32), ConwayEntity> = colony.get_entities();
+    // entities.get_mut(&(320, 320)).unwrap().set_alive(true, &mut canvas);
+    // entities.get_mut(&(320, 336)).unwrap().set_alive(true, &mut canvas);   
+    // entities.get_mut(&(320, 352)).unwrap().set_alive(true, &mut canvas);
+    // entities.get_mut(&(304, 352)).unwrap().set_alive(true, &mut canvas);
+    // entities.get_mut(&(288, 336)).unwrap().set_alive(true, &mut canvas);
+    // entities.get_mut(&(352, 368)).unwrap().set_alive(true, &mut canvas);   
+    // entities.get_mut(&(368, 352)).unwrap().set_alive(true, &mut canvas);
+    // entities.get_mut(&(368, 368)).unwrap().set_alive(true, &mut canvas);
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -49,9 +49,9 @@ pub fn create_window() {
             }
         }
 
-        grid_drawer::draw_grid(&mut canvas, &WIDTH, &HEIGHT);
         colony.draw_entities(&mut canvas);
+        grid_drawer::draw_grid(&mut canvas, &WIDTH, &HEIGHT, cell_size);
         canvas.present();
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }
 }

@@ -12,19 +12,15 @@ impl ConwayColony {
         let map = HashMap::new();
         Self { entities: map}
     }
-    // fn get_alive_count(&mut self, neighbors: &Vec<(u32, u32)>) -> u8{
-    //     let mut count: u8 = 0;
-    //     for coord in neighbors {
-    //         count += self.entities.get_mut(&coord).unwrap().get_alive() as u8;
-    //     }
-    //     count
-    // }
 
     pub fn add(&mut self, coord: (u32, u32), entity: ConwayEntity) {
         self.entities.insert(coord, entity);
     }
 
     pub fn draw_entities(&mut self, canvas: &mut Canvas<Window>) {
+        for entity in self.entities.values_mut().into_iter() {
+            entity.draw(canvas);
+        }
         let mut old_map = HashMap::new();
         for pair in <HashMap<(u32, u32), ConwayEntity> as Clone>::clone(&self.entities).into_iter() {
             old_map.insert(pair.0, pair.1);
@@ -34,7 +30,7 @@ impl ConwayColony {
             for coord in entity.get_neighbors() {
                 count += old_map.get_mut(coord).unwrap().get_alive() as u8;
             }
-            entity.update(&count, canvas)
+            entity.update(&count)
         }
     }
 
