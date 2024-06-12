@@ -92,4 +92,8 @@ impl ConwayEntity {
         }
         let _ = canvas.fill_rect(Rect::new(self.x as i32, self.y as i32, self.cell_size, self.cell_size));
     }
+
+    pub fn flip_alive(&mut self) {
+        self.alive = !self.alive;
+    }
 }

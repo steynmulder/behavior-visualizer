@@ -1,6 +1,6 @@
 extern crate sdl2;
 
-use sdl2::{event::Event, keyboard::Keycode};
+use sdl2::{event::Event, keyboard::Keycode, mouse::{MouseButton, MouseState}};
 use std::time::Duration;
 use crate::{colony::conway_colony::ConwayColony, drawer::grid_drawer, entity::conway_entity::ConwayEntity};
 
@@ -44,12 +44,27 @@ pub fn create_window() {
 
     let mut draw_grid = true;
     let mut run_sim = true;
+    let mut changed_cells : Vec<(u32, u32)> = vec![];
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit {..} => {break 'running;},
                 Event::KeyDown { keycode: Some(Keycode::G), .. } => {draw_grid = !draw_grid;},
-                Event::KeyDown { keycode: Some(Keycode::Space), .. } => {run_sim = !run_sim;}
+                Event::KeyDown { keycode: Some(Keycode::Space), .. } => {run_sim = !run_sim;},
+                Event::MouseButtonDown { mouse_btn: MouseButton::Left, x, y, .. } => {
+                    let coord = ((x - (x % (cell_size as i32))) as u32, (y - (y % (cell_size as i32))) as u32);
+                    colony.flip_entity(coord);
+                    changed_cells.push(coord);
+
+                }
+                Event::MouseMotion { mousestate, x, y, xrel, yrel, .. } => {
+                    let coord = ((x - (x % (cell_size as i32))) as u32, (y - (y % (cell_size as i32))) as u32);
+                    if mousestate.left() && !changed_cells.contains(&coord) {
+                        colony.flip_entity(coord);
+                        changed_cells.push(coord);
+                    }
+                }
+                Event::MouseButtonUp { mouse_btn: MouseButton::Left, .. } => {changed_cells = vec![];}
                 _ => {}
             }
         }

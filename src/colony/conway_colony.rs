@@ -38,6 +38,10 @@ impl ConwayColony {
         }
     }
 
+    pub fn flip_entity(&mut self, coord: (u32, u32)) {
+        self.entities.get_mut(&coord).unwrap().flip_alive();
+    }
+
     pub fn get_entities(&mut self) -> &mut HashMap<(u32, u32), ConwayEntity> {
         &mut self.entities
     }
