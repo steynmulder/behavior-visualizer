@@ -1,6 +1,6 @@
 extern crate sdl2;
 
-use sdl2::{event::Event, keyboard::Keycode, mouse::{MouseButton, MouseState}};
+use sdl2::{event::Event, keyboard::Keycode, mouse::MouseButton};
 use std::time::Duration;
 use crate::{colony::conway_colony::ConwayColony, drawer::grid_drawer, entity::conway_entity::ConwayEntity};
 
@@ -28,27 +28,18 @@ pub fn create_window() {
 
     for i in 0..(WIDTH/cell_size) {
         for j in 0..(HEIGHT/cell_size) {
-            colony.add((i * cell_size, j * cell_size), ConwayEntity::new(i * cell_size, j * cell_size, (i+j) % 2 == 0, cell_size, WIDTH, HEIGHT));
+            colony.add((i * cell_size, j * cell_size), ConwayEntity::new(i * cell_size, j * cell_size, false, cell_size, WIDTH, HEIGHT));
         }
     }
 
-    // let entities: &mut HashMap<(u32, u32), ConwayEntity> = colony.get_entities();
-    // entities.get_mut(&(320, 320)).unwrap().set_alive(true, &mut canvas);
-    // entities.get_mut(&(320, 336)).unwrap().set_alive(true, &mut canvas);   
-    // entities.get_mut(&(320, 352)).unwrap().set_alive(true, &mut canvas);
-    // entities.get_mut(&(304, 352)).unwrap().set_alive(true, &mut canvas);
-    // entities.get_mut(&(288, 336)).unwrap().set_alive(true, &mut canvas);
-    // entities.get_mut(&(352, 368)).unwrap().set_alive(true, &mut canvas);   
-    // entities.get_mut(&(368, 352)).unwrap().set_alive(true, &mut canvas);
-    // entities.get_mut(&(368, 368)).unwrap().set_alive(true, &mut canvas);
-
     let mut draw_grid = true;
-    let mut run_sim = true;
+    let mut run_sim = false;
     let mut changed_cells : Vec<(u32, u32)> = vec![];
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit {..} => {break 'running;},
+                Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {break 'running;}
                 Event::KeyDown { keycode: Some(Keycode::G), .. } => {draw_grid = !draw_grid;},
                 Event::KeyDown { keycode: Some(Keycode::Space), .. } => {run_sim = !run_sim;},
                 Event::MouseButtonDown { mouse_btn: MouseButton::Left, x, y, .. } => {
