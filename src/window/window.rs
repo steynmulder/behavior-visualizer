@@ -42,13 +42,14 @@ pub fn create_window() {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {break 'running;}
                 Event::KeyDown { keycode: Some(Keycode::G), .. } => {draw_grid = !draw_grid;},
                 Event::KeyDown { keycode: Some(Keycode::Space), .. } => {run_sim = !run_sim;},
+                Event::KeyDown { keycode: Some(Keycode::C), ..} => {colony.clear(&mut canvas);}
                 Event::MouseButtonDown { mouse_btn: MouseButton::Left, x, y, .. } => {
                     let coord = ((x - (x % (cell_size as i32))) as u32, (y - (y % (cell_size as i32))) as u32);
                     colony.flip_entity(coord);
                     changed_cells.push(coord);
 
                 }
-                Event::MouseMotion { mousestate, x, y, xrel, yrel, .. } => {
+                Event::MouseMotion { mousestate, x, y, .. } => {
                     let coord = ((x - (x % (cell_size as i32))) as u32, (y - (y % (cell_size as i32))) as u32);
                     if mousestate.left() && !changed_cells.contains(&coord) {
                         colony.flip_entity(coord);

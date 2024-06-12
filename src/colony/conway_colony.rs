@@ -45,4 +45,10 @@ impl ConwayColony {
     pub fn get_entities(&mut self) -> &mut HashMap<(u32, u32), ConwayEntity> {
         &mut self.entities
     }
+
+    pub fn clear(&mut self, canvas: &mut Canvas<Window>) {
+        for entity in self.entities.values_mut().into_iter() {
+            entity.set_alive(false, canvas);
+        }
+    }
 }
