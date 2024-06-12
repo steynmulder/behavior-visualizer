@@ -20,3 +20,8 @@ pub fn draw_cell(canvas: &mut Canvas<Window>, x: &u32, y: &u32, color: &Color, c
     canvas.set_draw_color(*color);
     let _ = canvas.fill_rect(Rect::new(*x as i32, *y as i32, cell_size, cell_size));
 }
+
+pub fn draw_pause(canvas: &mut Canvas<Window>) {
+    canvas.set_draw_color(Color::RGB(0, 0, 0));
+    let _ = canvas.fill_rects(&[Rect::new(20, 20, 10, 60), Rect::new(40, 20, 10, 60)]);
+}

@@ -1,6 +1,6 @@
 extern crate sdl2;
 
-use sdl2::{event::Event, keyboard::Keycode, mouse::MouseButton};
+use sdl2::{event::Event, keyboard::Keycode, mouse::MouseButton, pixels::Color};
 use std::time::Duration;
 use crate::{colony::conway_colony::ConwayColony, drawer::grid_drawer, entity::conway_entity::ConwayEntity};
 
@@ -62,6 +62,8 @@ pub fn create_window() {
         colony.draw_entities(&mut canvas);
         if run_sim {
             colony.update_entities();
+        } else {
+            grid_drawer::draw_pause(&mut canvas);
         }
         if draw_grid {
             grid_drawer::draw_grid(&mut canvas, &WIDTH, &HEIGHT, cell_size);
